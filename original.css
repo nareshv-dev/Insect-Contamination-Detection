@@ -1,0 +1,121 @@
+/* Import Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #dfabc7, #dfabc7);
+  color: #2f2f2f;
+  text-align: center;
+  padding: 40px;
+  margin: 0;
+}
+
+.container {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.emoji-box {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.title-text {
+  font-size: 32px;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #5c6bc0;
+  font-size: 16px;
+  margin-bottom: 25px;
+}
+
+input[type="file"] {
+  margin: 15px 0;
+  padding: 12px;
+  border: 2px dashed #aaa;
+  border-radius: 10px;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+input[type="file"]:hover {
+  background-color: #f1f1f1;
+}
+
+input[type="submit"] {
+  background: linear-gradient(to right, #00796b, #004d40);
+  color: rgb(255, 255, 255);
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+
+input[type="submit"]:hover {
+  background: linear-gradient(to right, #1a004d, #00332d);
+}
+
+img {
+  margin-top: 20px;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.02);
+}
+
+textarea {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+  overflow: hidden;       /* Hide scroll */
+  resize: none;
+  height: auto;           /* Allow auto height */
+  min-height: 120px;
+}
+
+h2 {
+  color: #004d40;
+  margin-top: 30px;
+}
+
+.footer {
+  margin-top: 30px;
+  font-size: 14px;
+  color: #666;
+  opacity: 0.8;
+}
+
+.results-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  gap: 40px;
+}
+
+.result-box, .summary-box {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+}

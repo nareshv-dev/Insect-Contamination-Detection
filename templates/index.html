@@ -2,49 +2,485 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Insect Detector</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI-powered insect detection for stored grains. Upload an image to identify harmful pests and get risk assessments." />
+  <title>Smart Insect Detector — AI-Powered Grain Protection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🪲</text></svg>" />
 </head>
 <body>
-  <div class="container">
-    <h1>
-      <span class="emoji-title">🪲</span>
-      <span class="title-text">Smart Insect Detector</span>
-    </h1>
-    <p class="subtitle">Helping farmers detect harmful insects in stored grains 🧪</p>
 
-    <form method="POST" enctype="multipart/form-data">
-      <input type="file" name="image" required />
-      <br />
-      <input type="submit" value="🔍 Detect Insect" />
-    </form>
-
-    {% if result_image %}
-    <div class="results-section">
-      <div class="result-box">
-        <h2>🖼️ Insect Detection Result</h2>
-        <img src="{{ url_for('static', filename='result.jpg') }}" alt="Detection Result" />
-      </div>
-      <div class="summary-box">
-        <h2>📄 Inference Summary</h2>
-        <textarea readonly>{{ message }}</textarea>
-      </div>
-    </div>
-    {% endif %}
-
-    <p class="footer">🔷 Built by NIT Interns </p>
+  <!-- Animated Background -->
+  <div class="bg-animation">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
   </div>
 
-  <!-- Auto-resize script -->
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+
+    <!-- Top Navbar -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-brand">
+        <div class="logo-icon">🪲</div>
+        <span>InsectGuard AI</span>
+      </div>
+      <div class="nav-links">
+        <a href="#analyzer-dashboard">Dashboard</a>
+        <a href="#pest-directory">Pest Encyclopedia</a>
+      </div>
+      <div class="system-status">
+        <span class="status-dot"></span>
+        <span class="status-text">System Online</span>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero-section">
+      <div class="hero-icon">🔬</div>
+      <h1>Grain Quality Diagnostics Hub</h1>
+      <p class="tagline">Protect stored stock with real-time AI-powered insect identification and severity assessments</p>
+    </section>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid" id="analyzer-dashboard">
+      
+      <!-- Left Column: Controls & Instructions -->
+      <div class="dashboard-column left-col">
+        <!-- Upload Card -->
+        <div class="upload-card">
+          <h2>
+            <span class="icon">📤</span>
+            Image Analyzer
+          </h2>
+          <form method="POST" enctype="multipart/form-data" id="detect-form">
+            <div class="drop-zone" id="drop-zone">
+              <span class="drop-zone-icon">🖼️</span>
+              <p class="drop-zone-text"><strong>Click to upload</strong> or drag & drop</p>
+              <p class="drop-zone-hint">Supports JPG, PNG, WEBP • Max 10MB</p>
+              <input type="file" name="image" accept="image/*" required class="file-input-hidden" id="file-input" />
+            </div>
+
+            <div class="image-preview" id="image-preview">
+              <img id="preview-img" src="" alt="Preview" />
+              <div class="preview-overlay">
+                <span class="preview-filename" id="preview-filename">image.jpg</span>
+                <button type="button" class="preview-remove" id="preview-remove" title="Remove image">✕</button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-detect" id="btn-detect">
+              <span>🔍 Analyze Sample</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Diagnostic Guidelines Panel -->
+        <div class="guidelines-card">
+          <h3>📋 Imaging Standards</h3>
+          <ul class="guide-list">
+            <li>
+              <strong>Bright Lighting:</strong>
+              <span>Ensure grains are well lit without heavy shadows.</span>
+            </li>
+            <li>
+              <strong>Flat Spread:</strong>
+              <span>Spread grain in a single flat layer for best Yolo detection results.</span>
+            </li>
+            <li>
+              <strong>Clear Focus:</strong>
+              <span>Keep camera steady and focus directly on the insects/grains.</span>
+            </li>
+            <li>
+              <strong>Supported Grains:</strong>
+              <span>Optimized for Rice, Wheat, Oats, Barley, Corn, pulses.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column: Visualizer Placeholder / Results -->
+      <div class="dashboard-column right-col">
+        
+        {% if not result_image %}
+        <!-- Landing State: Diagnostics Placeholder Hub -->
+        <div class="placeholder-hub">
+          <div class="placeholder-radar">
+            <div class="radar-sweep"></div>
+            <span class="radar-center-icon">📡</span>
+          </div>
+          <h3>AI Diagnostic Center Ready</h3>
+          <p>Upload a grain sample photo on the left sidebar to initialize insect detection scan. The neural network will analyze the image and generate full risk sheets.</p>
+          
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-label">ACTIVE MODEL</span>
+              <span class="spec-value">YOLOv8s Insect Detection</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">CONFIDENCE THRESHOLD</span>
+              <span class="spec-value">0.25 (25%)</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">DIAGNOSTIC TARGETS</span>
+              <span class="spec-value">10 Pest Species / Stages</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-label">ANALYSIS LATENCY</span>
+              <span class="spec-value">~200ms - 350ms</span>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        
+        <!-- Results Visualizer Grid -->
+        <div class="results-grid-inner" id="results-section">
+          <!-- Detection Image Card -->
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="card-icon purple">🖼️</div>
+              Scan Diagnostics (Annotated)
+            </div>
+            <div class="result-card-body image-body">
+              <img src="{{ url_for('static', filename='result.jpg') }}" alt="Detection Result" class="detection-image" />
+            </div>
+          </div>
+
+          <!-- Risk Assessment Card -->
+          {% if overall_risk %}
+          <div class="result-card risk-card {{ overall_risk.color_class }}">
+            <div class="result-card-header">
+              <div class="card-icon orange">⚠️</div>
+              Threat Matrix Summary
+            </div>
+            <div class="result-card-body gauge-card-body">
+              <div class="gauge-container">
+                <svg class="severity-gauge" viewBox="0 0 100 100">
+                  <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                  <circle class="gauge-progress" cx="50" cy="50" r="40" 
+                          style="stroke-dasharray: 251.2; stroke-dashoffset: calc(251.2 - (251.2 * {{ overall_risk.score }} / 3.0)); stroke: {{ overall_risk.bg_color }};"></circle>
+                  <text class="gauge-text" x="50" y="48" fill="white" font-weight="700" font-size="14" text-anchor="middle">{{ overall_risk.score }}/3.0</text>
+                  <text class="gauge-subtext" x="50" y="62" fill="var(--text-muted)" font-size="7" text-anchor="middle">Average Severity</text>
+                </svg>
+              </div>
+              
+              <div class="risk-summary">
+                <span class="severity-badge-glow" style="background-color: {{ overall_risk.bg_color }}22; border-color: {{ overall_risk.bg_color }}; color: {{ overall_risk.bg_color }};">
+                  {{ overall_risk.emoji }} {{ overall_risk.category.upper() }} THREAT
+                </span>
+                <p class="risk-description">{{ overall_risk.description }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Detailed Info (Pests Breakdown - Full Width) -->
+          <div class="result-card info-card">
+            <div class="result-card-header">
+              <div class="card-icon teal">📋</div>
+              Identified Pest Sheets
+            </div>
+            <div class="result-card-body">
+              {% if detected_pests %}
+                {% if detected_pests|length > 1 %}
+                  <!-- Tabs Navigation -->
+                  <div class="pest-tabs-nav">
+                    {% for pest in detected_pests %}
+                      <button type="button" class="tab-btn {% if loop.first %}active{% endif %}" onclick="switchPestTab(event, 'pest-{{ loop.index0 }}')">
+                        {{ pest.display_name }}
+                      </button>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <!-- Tab Content Container -->
+                <div class="pest-tabs-content">
+                  {% for pest in detected_pests %}
+                    <div id="pest-{{ loop.index0 }}" class="pest-detail-panel {% if loop.first %}active{% endif %}">
+                      <div class="pest-header">
+                        <div class="pest-title-row">
+                          <h3>{{ pest.display_name }}</h3>
+                          <span class="pest-scientific"><em>{{ pest.scientific_name }}</em></span>
+                        </div>
+                        <span class="severity-tag {{ pest.color_class }}">{{ pest.severity_label }} Severity</span>
+                      </div>
+                      
+                      <p class="pest-desc">{{ pest.description }}</p>
+                      <p class="pest-details-text">{{ pest.details }}</p>
+
+                      <div class="pest-info-grid">
+                        <!-- Signs of Damage -->
+                        <div class="pest-info-col">
+                          <h4>🔍 Signs of Damage</h4>
+                          <ul class="pest-list">
+                            {% for sign in pest.damage_signs %}
+                              <li>{{ sign }}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                        
+                        <!-- Prevention & Control -->
+                        <div class="pest-info-col">
+                          <h4>🛡️ Prevention & Control</h4>
+                          <ul class="pest-list">
+                            {% for tip in pest.prevention_tips %}
+                              <li>{{ tip }}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <!-- All Clear State -->
+                <div class="all-clear-state">
+                  <div class="success-shield">🛡️</div>
+                  <h3>Sample Clean & Insect-Free</h3>
+                  <p>Our AI-powered scan did not identify any grain-contaminating insects. Your stock appears healthy and safe for storage.</p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Pest Encyclopedia Section -->
+    <section class="encyclopedia-section" id="pest-directory">
+      <div class="section-header">
+        <h2>📚 Grain Protection Directory & Encyclopedia</h2>
+        <p>Explore comprehensive profiles, behaviors, and containment guides for supported insect species</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="encyclopedia-filters">
+        <button type="button" class="filter-btn active" onclick="filterPests(event, 'all')">All Species</button>
+        <button type="button" class="filter-btn" onclick="filterPests(event, 'high-risk')">🔴 High Threat</button>
+        <button type="button" class="filter-btn" onclick="filterPests(event, 'medium-risk')">🟡 Medium Threat</button>
+        <button type="button" class="filter-btn" onclick="filterPests(event, 'low-risk')">🟢 Low Threat</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="encyclopedia-grid">
+        {% for key, pest in pest_database.items() %}
+          <div class="pest-card {{ pest.color_class }}" onclick="openPestModal('modal-{{ loop.index0 }}')">
+            <div class="pest-card-badge {{ pest.color_class }}">{{ pest.severity_label }}</div>
+            <div class="pest-card-info">
+              <h3>{{ pest.display_name }}</h3>
+              <span class="pest-card-scientific"><em>{{ pest.scientific_name }}</em></span>
+              <p class="pest-card-short">{{ pest.description }}</p>
+            </div>
+            <div class="pest-card-action">Prevention Guidelines & Signs →</div>
+          </div>
+
+          <!-- Modal Popup for details -->
+          <div id="modal-{{ loop.index0 }}" class="pest-modal">
+            <div class="pest-modal-content">
+              <button class="pest-modal-close" onclick="closePestModal(event, 'modal-{{ loop.index0 }}')">✕</button>
+              <div class="pest-modal-header">
+                <h2>{{ pest.display_name }}</h2>
+                <span class="pest-modal-scientific"><em>{{ pest.scientific_name }}</em></span>
+                <div class="pest-modal-badge {{ pest.color_class }}">{{ pest.severity_label }} Severity</div>
+              </div>
+              <div class="pest-modal-body">
+                <div class="pest-modal-desc">
+                  <h3>Overview & Behavior</h3>
+                  <p>{{ pest.description }}</p>
+                  <p>{{ pest.details }}</p>
+                </div>
+                <div class="pest-modal-guides">
+                  <div class="guide-box">
+                    <h4>🔍 Signs of Damage</h4>
+                    <ul>
+                      {% for sign in pest.damage_signs %}
+                        <li>{{ sign }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div class="guide-box">
+                    <h4>🛡️ Prevention & Control</h4>
+                    <ul>
+                      {% for tip in pest.prevention_tips %}
+                        <li>{{ tip }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="footer-content">
+        <span>© 2026 InsectGuard AI. All rights reserved.</span>
+      </div>
+    </footer>
+
+  </div>
+
   <script>
-    window.onload = function () {
-      const textarea = document.querySelector('textarea');
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = textarea.scrollHeight + 'px';
+    // ===== Particle Generator =====
+    (function createParticles() {
+      const container = document.getElementById('particles');
+      if (!container) return;
+      const count = 30;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.classList.add('particle');
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (8 + Math.random() * 12) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        p.style.width = (2 + Math.random() * 3) + 'px';
+        p.style.height = p.style.width;
+        container.appendChild(p);
       }
-    };
-  </script>A
+    })();
+
+    // ===== Drop Zone Logic =====
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    const previewFilename = document.getElementById('preview-filename');
+    const previewRemove = document.getElementById('preview-remove');
+    const btnDetect = document.getElementById('btn-detect');
+    const form = document.getElementById('detect-form');
+
+    if (dropZone && fileInput) {
+      dropZone.addEventListener('click', () => fileInput.click());
+
+      ['dragenter', 'dragover'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropZone.classList.add('drag-over');
+        });
+      });
+
+      ['dragleave', 'drop'].forEach(evt => {
+        dropZone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          dropZone.classList.remove('drag-over');
+        });
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        if (files.length) {
+          fileInput.files = files;
+          showPreview(files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+          showPreview(fileInput.files[0]);
+        }
+      });
+    }
+
+    function showPreview(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (previewImg && previewFilename && imagePreview && dropZone) {
+          previewImg.src = e.target.result;
+          previewFilename.textContent = file.name;
+          imagePreview.classList.add('active');
+          dropZone.style.display = 'none';
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    if (previewRemove) {
+      previewRemove.addEventListener('click', () => {
+        if (fileInput && imagePreview && dropZone && previewImg) {
+          fileInput.value = '';
+          imagePreview.classList.remove('active');
+          dropZone.style.display = 'block';
+          previewImg.src = '';
+        }
+      });
+    }
+
+    if (form && btnDetect) {
+      form.addEventListener('submit', () => {
+        btnDetect.classList.add('loading');
+      });
+    }
+
+    // Scroll to results if present
+    const results = document.getElementById('results-section');
+    if (results) {
+      setTimeout(() => {
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+
+    // ===== Tab Switcher =====
+    function switchPestTab(evt, tabId) {
+      const panels = document.querySelectorAll('.pest-detail-panel');
+      panels.forEach(p => p.classList.remove('active'));
+
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(b => b.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+
+    // ===== Encyclopedia Filters =====
+    function filterPests(evt, category) {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      evt.currentTarget.classList.add('active');
+
+      const cards = document.querySelectorAll('.pest-card');
+      cards.forEach(card => {
+        if (category === 'all') {
+          card.style.display = 'flex';
+        } else if (card.classList.contains(category)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // ===== Modals Control =====
+    function openPestModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closePestModal(evt, modalId) {
+      evt.stopPropagation();
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target.classList.contains('pest-modal')) {
+        e.target.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+
 </body>
 </html>

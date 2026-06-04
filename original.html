@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Insect Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>
+      <span class="emoji-title">🪲</span>
+      <span class="title-text">Smart Insect Detector</span>
+    </h1>
+    <p class="subtitle">Helping farmers detect harmful insects in stored grains 🧪</p>
+
+    <form method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" required />
+      <br />
+      <input type="submit" value="🔍 Detect Insect" />
+    </form>
+
+    {% if result_image %}
+    <div class="results-section">
+      <div class="result-box">
+        <h2>🖼️ Insect Detection Result</h2>
+        <img src="{{ url_for('static', filename='result.jpg') }}" alt="Detection Result" />
+      </div>
+      <div class="summary-box">
+        <h2>📄 Inference Summary</h2>
+        <textarea readonly>{{ message }}</textarea>
+      </div>
+    </div>
+    {% endif %}
+
+    <p class="footer">🔷 Built by NIT Interns </p>
+  </div>
+
+  <!-- Auto-resize script -->
+  <script>
+    window.onload = function () {
+      const textarea = document.querySelector('textarea');
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+      }
+    };
+  </script>A
+</body>
+</html>
